@@ -272,3 +272,28 @@ app.post("/checkingvalidation",async(req,res)=>{
     res.status(500).send("The Error is"+err.message)
   }
 })
+
+app.post("/addedskills",async(req,res)=>{
+  const {firstname,lastname,password}=req.body
+  const values=req.body
+  const checkingfields=[
+    "firstname",
+    "lastname",
+    "password"
+  ]
+ const response=Object.keys(values).every((k)=>checkingfields.includes(k))
+ if(response){
+   try {
+     if (password.length > 5) {
+       res.send("Ok to continue");
+     } else {
+       res.send("Something went wrong");
+     }
+   } catch (err) {
+     res.status(500).send("Something Went wrong");
+   }
+ }else{
+  res.status(500).send("Error is happening")
+ }
+ 
+})

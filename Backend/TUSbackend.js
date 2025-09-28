@@ -247,3 +247,28 @@ app.patch("/practisepatch",async(req,res)=>{
   res.send(err.message)
  }
 })
+
+app.post("/checkingvalidation",async(req,res)=>{
+  try{
+    const data=req.body
+    const parameters=[
+      "firstname",
+      "lastname",
+      "password",
+      "age",
+      "gender",
+      "name"
+    ]
+    const responsedata=Object.keys(data).every((k)=>parameters.includes(k))
+    
+      if(responsedata){
+        res.status(200).send("User Added Successfully")
+
+      }else{
+        res.status(500).send("Something Went Wrong")
+      }
+    
+  }catch(err){
+    res.status(500).send("The Error is"+err.message)
+  }
+})

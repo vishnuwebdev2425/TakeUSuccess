@@ -160,140 +160,140 @@ app.get("/dsadata",async(req,res)=>{
     res.status(500).send("Something went wrog")
   }
 })
-const PractiseSchema=new mongoose.Schema({
-  firstname:{
-    type:String,
-    required:true,
-    unique:true
+// const PractiseSchema=new mongoose.Schema({
+//   firstname:{
+//     type:String,
+//     required:true,
+//     unique:true
 
-  },
-  lastname:{
-    type:String
+//   },
+//   lastname:{
+//     type:String
 
-  },
-  age:{
-    type:Number,
-    min:18,
-    max:60,
-    required:true
+//   },
+//   age:{
+//     type:Number,
+//     min:18,
+//     max:60,
+//     required:true
     
-  },
-  password:{
-    type:String,
-    required:true,
-    unique:true
+//   },
+//   password:{
+//     type:String,
+//     required:true,
+//     unique:true
   
-  },
-  gender:{
-    type:String,
-    required:true,
-    validate(value){
-      if(!["male","female","others"].includes( value)){
-        throw new Error("Unexpected Behaviour")
+//   },
+//   gender:{
+//     type:String,
+//     required:true,
+//     validate(value){
+//       if(!["male","female","others"].includes( value)){
+//         throw new Error("Unexpected Behaviour")
 
-      }
-    }
-  }
-},{
-  timestamps:true
-})
-const Practise=mongoose.model("Practise",PractiseSchema);
-app.post("/addpractise",async(req,res)=>{
-  try{
-    const Practisedata=new Practise(req.body)
-    await Practisedata.save()
-    res.send(Practisedata)
+//       }
+//     }
+//   }
+// },{
+//   timestamps:true
+// })
+// const Practise=mongoose.model("Practise",PractiseSchema);
+// app.post("/addpractise",async(req,res)=>{
+//   try{
+//     const Practisedata=new Practise(req.body)
+//     await Practisedata.save()
+//     res.send(Practisedata)
 
-  }catch(err){
-    res.status(500).send("Something went wrong"+err.message)
-  }
+//   }catch(err){
+//     res.status(500).send("Something went wrong"+err.message)
+//   }
   
-})
-app.patch("/patchpractise", async (req, res) => {
-  try {
-    const { id, ...updateData } = req.body;
+// })
+// app.patch("/patchpractise", async (req, res) => {
+//   try {
+//     const { id, ...updateData } = req.body;
 
-    const updatedData = await Practise.findOneAndUpdate(
-      { _id: id },
-      updateData,
-      {
-        new: true, // return updated document
-        runValidators: true, // ✅ enforce schema validation
-      }
-    );
+//     const updatedData = await Practise.findOneAndUpdate(
+//       { _id: id },
+//       updateData,
+//       {
+//         new: true, // return updated document
+//         runValidators: true, // ✅ enforce schema validation
+//       }
+//     );
 
-    if (!updatedData) {
-      return res.status(404).send("Document not found");
-    }
+//     if (!updatedData) {
+//       return res.status(404).send("Document not found");
+//     }
 
-    res.send(updatedData);
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-});
-app.patch("/practisepatch",async(req,res)=>{
-  const data=req.body
-  const values=[
-    "firstname","lastname","password"
-  ]
- try{
-   const checkedresult=Object.keys(data).every((k)=>values.includes(k))
-   if(checkedresult){
-    res.send('Everything will executed is successfully')
-   }else{
-    res.send("Something went wrong")
-   }
- }catch(err){
-  res.send(err.message)
- }
-})
+//     res.send(updatedData);
+//   } catch (err) {
+//     res.status(500).send(err.message);
+//   }
+// });
+// app.patch("/practisepatch",async(req,res)=>{
+//   const data=req.body
+//   const values=[
+//     "firstname","lastname","password"
+//   ]
+//  try{
+//    const checkedresult=Object.keys(data).every((k)=>values.includes(k))
+//    if(checkedresult){
+//     res.send('Everything will executed is successfully')
+//    }else{
+//     res.send("Something went wrong")
+//    }
+//  }catch(err){
+//   res.send(err.message)
+//  }
+// })
 
-app.post("/checkingvalidation",async(req,res)=>{
-  try{
-    const data=req.body
-    const parameters=[
-      "firstname",
-      "lastname",
-      "password",
-      "age",
-      "gender",
-      "name"
-    ]
-    const responsedata=Object.keys(data).every((k)=>parameters.includes(k))
+// app.post("/checkingvalidation",async(req,res)=>{
+//   try{
+//     const data=req.body
+//     const parameters=[
+//       "firstname",
+//       "lastname",
+//       "password",
+//       "age",
+//       "gender",
+//       "name"
+//     ]
+//     const responsedata=Object.keys(data).every((k)=>parameters.includes(k))
     
-      if(responsedata){
-        res.status(200).send("User Added Successfully")
+//       if(responsedata){
+//         res.status(200).send("User Added Successfully")
 
-      }else{
-        res.status(500).send("Something Went Wrong")
-      }
+//       }else{
+//         res.status(500).send("Something Went Wrong")
+//       }
     
-  }catch(err){
-    res.status(500).send("The Error is"+err.message)
-  }
-})
+//   }catch(err){
+//     res.status(500).send("The Error is"+err.message)
+//   }
+// })
 
-app.post("/addedskills",async(req,res)=>{
-  const {firstname,lastname,password}=req.body
-  const values=req.body
-  const checkingfields=[
-    "firstname",
-    "lastname",
-    "password"
-  ]
- const response=Object.keys(values).every((k)=>checkingfields.includes(k))
- if(response){
-   try {
-     if (password.length > 5) {
-       res.send("Ok to continue");
-     } else {
-       res.send("Something went wrong");
-     }
-   } catch (err) {
-     res.status(500).send("Something Went wrong");
-   }
- }else{
-  res.status(500).send("Error is happening")
- }
+// app.post("/addedskills",async(req,res)=>{
+//   const {firstname,lastname,password}=req.body
+//   const values=req.body
+//   const checkingfields=[
+//     "firstname",
+//     "lastname",
+//     "password"
+//   ]
+//  const response=Object.keys(values).every((k)=>checkingfields.includes(k))
+//  if(response){
+//    try {
+//      if (password.length > 5) {
+//        res.send("Ok to continue");
+//      } else {
+//        res.send("Something went wrong");
+//      }
+//    } catch (err) {
+//      res.status(500).send("Something Went wrong");
+//    }
+//  }else{
+//   res.status(500).send("Error is happening")
+//  }
  
-})
+// })

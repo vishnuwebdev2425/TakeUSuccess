@@ -6,7 +6,8 @@ const bcrypt = require("bcrypt");
 const cookieparser=require('cookie-parser')
 const { validatingfunction}=require("./util/validationfunction")
 app.use(express.json());
-app.use(cookieparser())
+app.use(cookieparser());
+const  { userAuth } =require('./middleware/Auth');
 const jwtToken=require('jsonwebtoken')
 const IntializeDb=async()=>{
     try{
@@ -194,3 +195,14 @@ app.get("/details", async(req, res) => {
     res.send("Something went wrong")
   }
 });
+app.get("/getprofile",userAuth,async(req,res)=>{
+    try{
+        const userdata=req.userdata
+        res.send(userdata)
+    }catch(err){
+        res.status(500).send("Something went wrong")
+
+    }
+})
+
+module.exports = { signups };
